@@ -8,10 +8,10 @@ const {createTask,
     deleteTask,
     filterTask}=require('../controllers/taskController');
 
-router.post('/',varifyToken,createTask);
+router.post('/create',varifyToken,createTask);
 router.get('/:id',varifyToken,getTaskById);
 router.get('/',varifyToken,getTask);
-router.put('/:id',varifyToken,updateTask);
-router.delete('/:id',varifyToken,deleteTask);
+router.put('/edit/:id',varifyToken,updateTask);
+router.delete('/delete/:id',varifyToken,deleteTask);
 router.get('/search',varifyToken,filterTask);
 module.exports=router;
