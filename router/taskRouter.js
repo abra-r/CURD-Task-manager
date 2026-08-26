@@ -6,7 +6,7 @@ const {createTask,
     getTask,
     updateTask,
     deleteTask,
-    filterTask}=require('./controllers/taskController');
+    filterTask}=require('../controllers/taskController');
 
 router.post('/',varifyToken,createTask);
 router.get('/:id',varifyToken,getTaskById);
