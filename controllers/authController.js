@@ -2,8 +2,11 @@ const express=require('express');
 const bcrypt=require('bcrypt');
 const jwt=require('jsonwebtoken');
 const User=require('../models/user');
+const asyncHandler=require('../utils/asyncHandler');
+
+
 require('dotenv').config();
-const signup=async (req,res)=>{
+const signup= asyncHandler(async (req,res)=>{
     const{email,password}=req.body;
     const existing =await User.findOne({email});
 
@@ -16,21 +19,22 @@ const signup=async (req,res)=>{
     const user=await User.create({email,password:hashedPassword});
     res.status(201).json({message:"User created",user_id:user._id});
 
-}
+});
 
-const login=async (req,res)=>
+
+const login=asyncHandler(async (req,res)=>
 {
     const {email,password}=req.body;
     const user= await User.findOne({email});
     if(!user)
     {
-        res.status(400).json({error:'User not found with this email'});
+        return res.status(400).json({error:'User not found with this email'});
 
     }
     const isMatch=await bcrypt.compare(password,user.password);
     if(!isMatch)
     {
-        return res.status(400).json({message:'wrong password'});
+        return res.status(400).json({error:'wrong password'});
 
     }
     const token=jwt.sign({user_id:user._id,email:user.email},process.env.JWTSECRATE
@@ -39,6 +43,6 @@ const login=async (req,res)=>
     res.json({token});
 
 
-}
+});
 
 module.exports={signup,login};

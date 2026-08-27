@@ -22,8 +22,16 @@ app.get('/',async (req,res)=>{
     return res.send('Hello I AM SUPER DUPER TASK MANAGER APP')
 
 });
+app.use((err,req,res,next)=>{
+    console.error(err.stack);
+    if(err.name==='ValidationError'){
+        return res.status(400).json({error:'Validation Failed!',details:err.message})
+    }
+    return res.status(500).json({message:"Something went wrong!",details:err.message});
 
-const PORT=process.env.PORT
+
+})
+const PORT=process.env.PORT||3000;
 app.listen(PORT,()=>{
     console.log(`server is running on http://localhost:${PORT}`);
 

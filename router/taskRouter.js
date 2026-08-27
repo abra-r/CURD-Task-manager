@@ -7,11 +7,11 @@ const {createTask,
     updateTask,
     deleteTask,
     filterTask}=require('../controllers/taskController');
-
+router.get('/filter',varifyToken,filterTask);
 router.post('/create',varifyToken,createTask);
 router.get('/:id',varifyToken,getTaskById);
 router.get('/',varifyToken,getTask);
 router.put('/edit/:id',varifyToken,updateTask);
 router.delete('/delete/:id',varifyToken,deleteTask);
-router.get('/search',varifyToken,filterTask);
+
 module.exports=router;
