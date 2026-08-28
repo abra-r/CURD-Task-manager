@@ -5,10 +5,16 @@ const mongoose =require('mongoose');
 const dns=require('dns');
 const authRouter=require('./router/authRouter');
 const taskRouter=require('./router/taskRouter');
+const cors=require('cors');
 require('dotenv').config();
 
+
+app.use(cors({
+    origin:'http://localhost:5500'
+}))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 
 app.use('/auth',authRouter);
 app.use('/tasks',taskRouter);
@@ -19,7 +25,7 @@ mongoose.connect(process.env.MONGODB_URL).then(()=>console.log('Mongodb Connecte
 .catch(err=>console.log('Something Went Wrong',err));
 
 app.get('/',async (req,res)=>{
-    return res.send('Hello I AM SUPER DUPER TASK MANAGER APP')
+    return res.json({message:'Hello I AM SUPER DUPER TASK MANAGER APP'})
 
 });
 app.use((err,req,res,next)=>{

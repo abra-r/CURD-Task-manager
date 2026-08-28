@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+
+<body>
+    <p id="welcome-message" name="welcome-message"></p>
+
+</body>
+<script>
+    const API_BASE = 'http://localhost:3001';
+    const welcomeMessage = document.getElementById('welcome-message');
+
+    async function getWelcomeMessage() {
+        const response =await fetch(API_BASE, {
+            method: 'GET'
+        });
+        const data=await response.json();
+        welcomeMessage.textContent = JSON.stringify( data)
+    }
+    getWelcomeMessage();
+
+
+
+</script>
+
+</html>
