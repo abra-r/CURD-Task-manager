@@ -204,7 +204,7 @@ async function getTaskByid(id) {
 const logoutButton=document.getElementById('logout-button');
 logoutButton.addEventListener('click',async(event)=>{
     localStorage.removeItem('token');
-    window.location.reload();
+    window.location.href='login.html';
 })
 updtaeTask();
 getAllTasks();
