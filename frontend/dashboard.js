@@ -11,6 +11,8 @@ const globalMessage = document.getElementById('global-message');
 const getAllTasks = async () => {
     try {
         if (!token) {
+            window.location.href='login.html';
+            return ;
 
         }
         const response = await fetch(`${API_BASE}/tasks`, {
@@ -53,6 +55,7 @@ taskForm.addEventListener('submit', async (event) => {
     const taskCreateMessage = document.getElementById('task-create-message');
     if (taskTitle === '') {
         taskCreateMessage.textContent = 'Title can not be empty';
+        return;
 
     }
 
@@ -69,7 +72,6 @@ taskForm.addEventListener('submit', async (event) => {
     })
     if (response.ok) {
         window.location.reload();
-        taskCreateMessage.textContent = `Task ${title} created successfully`;
 
     }
     else {
@@ -83,22 +85,31 @@ deleteTask.addEventListener('submit', async (event) => {
     const taskId = document.getElementById('task-id').value.trim();
     if (taskId === '') {
         globalMessage.textContent = 'Enter valid id';
+        return;
 
     }
     try {
-        const respons = await fetch(`${API_BASE}/tasks/delete/${taskId}`, {
+        const response = await fetch(`${API_BASE}/tasks/delete/${taskId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
             }
 
         })
+        const data=await response.json();
+        if(!response.ok)
+        {
+            globalMessage.textContent=data.error||'Deleted Failed';
+            return;
+
+        }
         globalMessage.textContent = 'Taske deleted successfully';
         document.location.reload();
 
     }
     catch (err) {
-        console.log(`Sometging Werong. Details`);
+        console.log(`Could not reach the server`);
+        console.log(err);
     }
 
 
@@ -157,9 +168,17 @@ function updtaeTask() {
                 })
 
             })
+            const data=await response.json();
+            if(!response.ok)
+            {
+                globalMessage.textContent=data.error||'Update failed';
+                return;
+            }
+            window.location.reload();
         }
         catch (err) {
-            console.log(`Something went wrong!`)
+            console.log(`Could not reach the server`);
+            console.log(err);
 
         }
     })
@@ -181,5 +200,11 @@ async function getTaskByid(id) {
 
 
 }
+
+const logoutButton=document.getElementById('logout-button');
+logoutButton.addEventListener('click',async(event)=>{
+    localStorage.removeItem('token');
+    window.location.reload();
+})
 updtaeTask();
 getAllTasks();
